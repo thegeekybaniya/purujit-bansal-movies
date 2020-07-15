@@ -1,11 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     ScrollView,
     StyleSheet,
     Text,
     useWindowDimensions,
     View,
+    BackHandler,
 } from 'react-native';
 import Animated, {useCode, clockRunning} from 'react-native-reanimated';
 
@@ -51,12 +52,13 @@ function titleCase(value: string): string {
         if (shouldUpcase) {
             title += value[i].toUpperCase();
             shouldUpcase = false;
+        } else {
+            title += value[i];
         }
         if (value[i] === ' ') {
             shouldUpcase = true;
         }
     }
-
     return title;
 }
 
@@ -116,6 +118,17 @@ const Modal = ({movie, position, close}: ModalProps) => {
         ],
         [],
     );
+
+    const backAction = () => {
+        close();
+        return true;
+    };
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+    }, []);
 
     return (
         <SwipeToClose y={translationY} opacity={opacity.value} {...{scale}}>

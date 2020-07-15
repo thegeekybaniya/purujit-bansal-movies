@@ -36,10 +36,9 @@ const makeReviews = (movie, count) => {
 };
 
 const generateMovies = (moviesCount, reviewsPerMovie) => {
-    const movies = times((i) => makeMovie(i), moviesCount);
+    let movies = times((i) => makeMovie(i), moviesCount);
 
     flatMap((movie) => makeReviews(movie, fuzzCount(reviewsPerMovie)), movies);
-
     return movies;
 };
 
